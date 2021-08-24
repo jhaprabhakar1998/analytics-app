@@ -1,0 +1,49 @@
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+        sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+*,
+*::after,
+*::before {
+    box-sizing: border-box;
+}
+
+.login-screen {
+    display: grid;
+    grid-template-columns: auto;
+    grid-gap: 20px;
+    font-size: 4rem;
+}
+
+.login-screen-heading {
+    height: 100px;
+}
+
+.login-screen-buttons {
+    margin: auto;
+}
+
+.login-screen-buttons button {
+    font-size: xx-large;
+    padding: 2rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+.login-google button {
+    padding-left: 2.5rem;
+    padding-right: 3.5rem;
+}
+
+.login-screen-buttons .login-facebook {
+    margin-bottom: 20px;
+}
+
+.google-logo {
+    padding-right: 15px;
+}
