@@ -1,10 +1,13 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import React, { useState, useEffect } from 'react';
 import FacebookIcon from '@material-ui/icons/Facebook';
 import Button from '@material-ui/core/Button';
+
+import { auth, signInWithGoogle } from "../firebase";
+
 import '../style.css';
 
-function AuthScreen(props) {
+function AuthScreen({ setGoogleLoginUserDetails }) {
+
     return (
         <div className={"login-screen"}>
             <div className={"login-screen-heading"}>
@@ -18,7 +21,7 @@ function AuthScreen(props) {
                     </Button>
                 </div>
                 <div className={"login-google"}>
-                    <Button variant="contained" color="secondary">
+                    <Button variant="contained" color="secondary" onClick={() => signInWithGoogle(setGoogleLoginUserDetails)}>
                         <img src="https://img.icons8.com/office/30/000000/google-logo.png" alt={"Google logo"} className={"google-logo"} />
                         Login With Google
                     </Button>
