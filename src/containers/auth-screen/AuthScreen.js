@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import FacebookIcon from '@material-ui/icons/Facebook';
 import Button from '@material-ui/core/Button';
 import { withRouter } from 'react-router';
