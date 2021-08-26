@@ -3,8 +3,8 @@ import { withRouter, Switch, Route } from 'react-router';
 
 import PATHS from './paths';
 
-import AuthScreen from './auth-screen/AuthScreen';
-import AnalyticsScreen from './analytics-screen/analytics-screen';
+import AuthScreen from './containers/auth-screen/AuthScreen';
+import AnalyticsScreen from './containers/analytics-screen/analytics-screen';
 
 function App(props) {
     const getIsAuth = localStorage.getItem("isAuth");
@@ -14,15 +14,16 @@ function App(props) {
 
     const routes = [
         { path: PATHS.LOGIN, component: () => <AuthScreen props={props} isAuth={isAuth} setGoogleLoginUserDetails={setGoogleLoginUserDetails} /> },
-        { path: PATHS.ANALYTICS, component: () => <AnalyticsScreen /> },
+        { path: PATHS.ANALYTICS, component: () => <AnalyticsScreen props={props} SetIsAuth={SetIsAuth} setGoogleLoginUserDetails={setGoogleLoginUserDetails} /> },
         { path: '/', component: () => <AuthScreen props={props} isAuth={isAuth} setGoogleLoginUserDetails={setGoogleLoginUserDetails} /> },
     ]
 
     useEffect(() => {
-        googleLoginUserDetails ? localStorage.setItem("isAuth", true) : localStorage.setItem("isAuth", false);
+        googleLoginUserDetails !== '#' ? localStorage.setItem("isAuth", true) : localStorage.setItem("isAuth", false);
         localStorage.setItem("googleLoginUserDetails", googleLoginUserDetails);
-        isAuth ? props.history.push(PATHS.ANALYTICS) : props.history.push(PATHS.LOGIN);
-        googleLoginUserDetails ? SetIsAuth(true) : SetIsAuth(false);
+        googleLoginUserDetails !== '#' ? props.history.push(PATHS.ANALYTICS) : props.history.push(PATHS.LOGIN);
+        googleLoginUserDetails !== '#' ? SetIsAuth(true) : SetIsAuth(false);
+
     }, [googleLoginUserDetails, isAuth, props.history]);
 
     return (
