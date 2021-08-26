@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import FacebookIcon from '@material-ui/icons/Facebook';
 import Button from '@material-ui/core/Button';
+import { withRouter } from 'react-router';
 
-import { auth, signInWithGoogle } from "../firebase";
+import { signInWithGoogle } from "../firebase";
 
 import '../style.css';
 
-function AuthScreen({ setGoogleLoginUserDetails }) {
+function AuthScreen({ props, setGoogleLoginUserDetails, isAuth }) {
+    console.log("props ", props);
+    console.log("isAuth ", isAuth);
 
     return (
         <div className={"login-screen"}>
@@ -31,4 +34,4 @@ function AuthScreen({ setGoogleLoginUserDetails }) {
     );
 }
 
-export default AuthScreen;
+export default withRouter(AuthScreen);

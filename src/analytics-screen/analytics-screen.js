@@ -1,7 +1,8 @@
 
 import React from 'react';
+import { withRouter } from 'react-router';
 
-function AnalyticsScreen(props) {
+function AnalyticsScreen({ props }) {
     return (
         <div>
             <h1>Welcome to AnalyticsScreen.</h1>
@@ -9,4 +10,4 @@ function AnalyticsScreen(props) {
     );
 }
 
-export default AnalyticsScreen;
+export default withRouter(AnalyticsScreen);
