@@ -71,4 +71,14 @@ html {
   #menu-icon {
     display: flex;
   }
+  .login-screen {
+    font-size: 1.5rem;
+  }
+  .login-screen-buttons button {
+    font-size: 1.5rem;
+    width: 100%;
+  }
+  .login-google button {
+    padding-top: 1.6rem;
+  }
 }
