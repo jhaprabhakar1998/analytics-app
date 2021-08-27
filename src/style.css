@@ -1,63 +1,74 @@
 body {
-    margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-        sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
+
+html { 
+    background: url('./assets/background.jpg') no-repeat center center fixed; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+  }
 
 *,
 *::after,
 *::before {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 .login-screen {
-    display: grid;
-    grid-template-columns: auto;
-    grid-gap: 20px;
-    font-size: 4rem;
+  display: grid;
+  grid-template-columns: auto;
+  grid-gap: 20px;
+  font-size: 4rem;
 }
 
 .login-screen-heading {
-    height: 100px;
+  height: 100px;
+  text-align: center;
+  margin-bottom: 50px;
+  margin-top: 20px;
 }
 
 .login-screen-buttons {
-    margin: auto;
+  margin: auto;
 }
 
 .login-screen-buttons button {
-    font-size: xx-large;
-    padding: 2rem;
-    padding-top: 1rem;
-    padding-bottom: 1rem;
+  font-size: xx-large;
+  padding: 2rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
 }
 
 .login-google button {
-    padding-left: 2.5rem;
-    padding-right: 3.5rem;
+  padding-left: 2.5rem;
+  padding-right: 3.5rem;
 }
 
 .login-screen-buttons .login-facebook {
-    margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 
 .google-logo {
-    padding-right: 15px;
+  padding-right: 15px;
 }
 
-#menu-icon{
-    display: none;
+#menu-icon {
+  display: none;
 }
 
-.nav-item{
-    flex: 1;
+.nav-item {
+  flex: 1;
 }
 
-@media screen and (max-width: 720px){
-    #menu-icon{
-        display: flex;
-    }
+@media screen and (max-width: 720px) {
+  #menu-icon {
+    display: flex;
+  }
 }
