@@ -22,7 +22,6 @@ const realtimedb = firebase.database();
 const googleProvider = new firebase.auth.GoogleAuthProvider();
 const signInWithGoogle = async (setGoogleLoginUserDetails) => {
     try {
-        console.log("inside signInWithGoogle function");
         const res = await auth.signInWithPopup(googleProvider);
         const user = res.user;
         const query = await db
