@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { withRouter } from 'react-router';
 
 import AppBar from '@material-ui/core/AppBar';
@@ -12,12 +12,14 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 
+import { realtimedb } from '../../firebase';
 import '../../style.css';
 
 function AnalyticsScreen({ props, SetIsAuth, setGoogleLoginUserDetails }) {
 
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
+    let [allRevenueData, setAllRevenueData] = useState([]);
 
     const handleMenu = (event) => {
         setAnchorEl(event.currentTarget);
@@ -35,6 +37,19 @@ function AnalyticsScreen({ props, SetIsAuth, setGoogleLoginUserDetails }) {
         props.history.push('/');
     };
 
+    if (allRevenueData.length === 0) {
+        realtimedb.ref().on("value", snapshot => {
+            let allRevenueData = [];
+            if (snapshot) {
+                snapshot.forEach(snap => {
+                    allRevenueData.push(snap.val());
+                });
+                setAllRevenueData(allRevenueData)
+            }
+        })
+    }
+
+    console.log("all revenue data ", allRevenueData);
 
     return (
         <div>

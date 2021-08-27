@@ -1,5 +1,6 @@
 import firebase from "firebase/app";
 import 'firebase/firestore';
+import 'firebase/database';
 import "firebase/auth";
 
 const firebaseConfig = firebase.initializeApp({
@@ -10,11 +11,13 @@ const firebaseConfig = firebase.initializeApp({
     messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
     appId: process.env.REACT_APP_FIREBASE_APP_ID,
     measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID,
+    databaseURL: process.env.REACT_APP_FIREBASE_DATABASE_URL,
 })
 
 const app = !firebase.apps.length ? firebase.initializeApp(firebaseConfig) : firebase.app();
 const auth = app.auth();
 const db = app.firestore();
+const realtimedb = firebase.database();
 
 const googleProvider = new firebase.auth.GoogleAuthProvider();
 const signInWithGoogle = async (setGoogleLoginUserDetails) => {
@@ -48,6 +51,7 @@ const logout = () => {
 export {
     auth,
     db,
+    realtimedb,
     signInWithGoogle,
     logout,
 };
