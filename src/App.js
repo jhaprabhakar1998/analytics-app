@@ -6,11 +6,19 @@ import PATHS from './paths';
 import AuthScreen from './containers/auth-screen/AuthScreen';
 import AnalyticsScreen from './containers/analytics-screen/analytics-screen';
 
+const isNULL = (obj) => {
+    if (obj) {
+        return false;
+    }
+    return true;
+}
+
 function App(props) {
-    const getIsAuth = localStorage.getItem("isAuth");
     const getGoogleLoginUserDetails = localStorage.getItem("googleLoginUserDetails");
+    const authValue = isNULL(getGoogleLoginUserDetails) ? false : true;
+
     const [googleLoginUserDetails, setGoogleLoginUserDetails] = useState(getGoogleLoginUserDetails);
-    const [isAuth, SetIsAuth] = useState(getIsAuth);
+    const [isAuth, SetIsAuth] = useState(authValue);
 
     const routes = [
         { path: PATHS.LOGIN, component: () => <AuthScreen props={props} isAuth={isAuth} setGoogleLoginUserDetails={setGoogleLoginUserDetails} /> },
@@ -19,12 +27,15 @@ function App(props) {
     ]
 
     useEffect(() => {
-        googleLoginUserDetails !== '#' ? localStorage.setItem("isAuth", true) : localStorage.setItem("isAuth", false);
-        localStorage.setItem("googleLoginUserDetails", googleLoginUserDetails);
-        googleLoginUserDetails !== '#' ? props.history.push(PATHS.ANALYTICS) : props.history.push(PATHS.LOGIN);
-        googleLoginUserDetails !== '#' ? SetIsAuth(true) : SetIsAuth(false);
+        isNULL(googleLoginUserDetails) ? localStorage.removeItem("googleLoginUserDetails") : localStorage.setItem("googleLoginUserDetails", googleLoginUserDetails);
+        isNULL(googleLoginUserDetails) ? localStorage.setItem("isAuth", false) : localStorage.setItem("isAuth", true);
+        isNULL(googleLoginUserDetails) ? props.history.push(PATHS.LOGIN) : props.history.push(PATHS.ANALYTICS);
+        isNULL(googleLoginUserDetails) ? SetIsAuth(false) : SetIsAuth(true);
 
     }, [googleLoginUserDetails, isAuth, props.history]);
+
+    // console.log("check getIsAuth ", isAuth);
+    // console.log("check googleLoginUserDetails ", googleLoginUserDetails);
 
     return (
         <div>

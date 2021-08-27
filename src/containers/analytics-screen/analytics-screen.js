@@ -50,9 +50,13 @@ function AnalyticsScreen({ props, SetIsAuth, setGoogleLoginUserDetails }) {
     };
 
     const handleLogOut = (SetIsAuth, setGoogleLoginUserDetails) => {
-        localStorage.setItem("isAuth", false);
-        localStorage.setItem("googleLoginUserDetails", '#');
-        setGoogleLoginUserDetails('#');
+        // localStorage.setItem("isAuth", false);
+        // localStorage.setItem("googleLoginUserDetails", '#');
+
+        // localStorage.removeItem("googleLoginUserDetails");
+        // localStorage.removeItem("isAuth");
+        localStorage.clear();
+        setGoogleLoginUserDetails(null);
         SetIsAuth(false);
         props.history.push('/');
     };
