@@ -12,12 +12,18 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 
+import PATHS from '../../paths';
 import { AreaChart, XAxis, YAxis, CartesianGrid, Tooltip, Area, ResponsiveContainer } from 'recharts';
 
 import { realtimedb } from '../../firebase';
 import '../../style.css';
+import CountryAnalysis from './country-analysis';
 
-function AnalyticsScreen({ props, SetIsAuth, setGoogleLoginUserDetails }) {
+function AnalyticsScreen({ props, SetIsAuth, setLoginUserDetails }) {
+    const countryAnalysispath = PATHS.ANALYTICS_COUNTRY.replace(':name', 'india');
+    console.log("countryANalysis path ", countryAnalysispath);
+    const quaterlyAnalysispath = PATHS.ANALYTICS_QUATERLY.replace(':id', '1');
+    const monthlyAnalysispath = PATHS.ANALYTICS_MONTHLY.replace(':id', '1');
 
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
@@ -49,14 +55,9 @@ function AnalyticsScreen({ props, SetIsAuth, setGoogleLoginUserDetails }) {
         setAnchorEl(null);
     };
 
-    const handleLogOut = (SetIsAuth, setGoogleLoginUserDetails) => {
-        // localStorage.setItem("isAuth", false);
-        // localStorage.setItem("googleLoginUserDetails", '#');
-
-        // localStorage.removeItem("googleLoginUserDetails");
-        // localStorage.removeItem("isAuth");
+    const handleLogOut = (SetIsAuth, setLoginUserDetails) => {
         localStorage.clear();
-        setGoogleLoginUserDetails(null);
+        setLoginUserDetails(null);
         SetIsAuth(false);
         props.history.push('/');
     };
@@ -89,11 +90,14 @@ function AnalyticsScreen({ props, SetIsAuth, setGoogleLoginUserDetails }) {
             <div>
                 <AppBar position="static">
                     <Toolbar>
-                        <IconButton edge="start" id={"menu-icon"} color="inherit" aria-label="menu">
-                            <MenuIcon />
-                        </IconButton>
-                        <Typography variant="h6" className={"nav-item"} >
-                            Photos
+                        <Typography variant="h6" className={"nav-item"} onClick={() => props.history.push(countryAnalysispath)}>
+                            Country Analysis
+                        </Typography>
+                        <Typography variant="h6" className={"nav-item"} onClick={() => props.history.push(monthlyAnalysispath)}>
+                            Monthly Analysis
+                        </Typography>
+                        <Typography variant="h6" className={"nav-item"} onClick={() => props.history.push(quaterlyAnalysispath)}>
+                            Quarterly Analysis
                         </Typography>
                         {(
                             <div>
@@ -122,7 +126,7 @@ function AnalyticsScreen({ props, SetIsAuth, setGoogleLoginUserDetails }) {
                                     onClose={handleClose}
                                 >
                                     <MenuItem onClick={() => handleClose}>Profile</MenuItem>
-                                    <MenuItem onClick={() => handleLogOut(SetIsAuth, setGoogleLoginUserDetails)}>Log Out</MenuItem>
+                                    <MenuItem onClick={() => handleLogOut(SetIsAuth, setLoginUserDetails)}>Log Out</MenuItem>
                                 </Menu>
                             </div>
                         )}
@@ -130,7 +134,7 @@ function AnalyticsScreen({ props, SetIsAuth, setGoogleLoginUserDetails }) {
                 </AppBar>
             </div>
 
-            <h1 style={{ textAlign: 'center' }}>Welcome to AnalyticsScreen</h1>
+            <h1 style={{ textAlign: 'center' }}>Welcome to Analytics Dashboard</h1>
 
             {
                 allRevenueData.length !== 0 ?

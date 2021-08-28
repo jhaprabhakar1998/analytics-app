@@ -3,11 +3,11 @@ import FacebookIcon from '@material-ui/icons/Facebook';
 import Button from '@material-ui/core/Button';
 import { withRouter } from 'react-router';
 
-import { signInWithGoogle } from "../../firebase";
+import { signInWithGoogle, signinWithSocial } from "../../firebase";
 
 import '../../style.css';
 
-function AuthScreen({ props, setGoogleLoginUserDetails, isAuth }) {
+function AuthScreen({ props, setLoginUserDetails, isAuth }) {
 
     return (
         <div className={"login-screen"}>
@@ -22,7 +22,7 @@ function AuthScreen({ props, setGoogleLoginUserDetails, isAuth }) {
                     </Button>
                 </div>
                 <div className={"login-google"}>
-                    <Button variant="contained" color="secondary" onClick={() => signInWithGoogle(setGoogleLoginUserDetails)}>
+                    <Button variant="contained" color="secondary" onClick={() => signinWithSocial("google", true, setLoginUserDetails)}>
                         <img src="https://img.icons8.com/office/30/000000/google-logo.png" alt={"Google logo"} className={"google-logo"} />
                         Login With Google
                     </Button>

@@ -3,8 +3,13 @@ import { withRouter, Switch, Route } from 'react-router';
 
 import PATHS from './paths';
 
+import { useLocation } from 'react-router-dom';
+
 import AuthScreen from './containers/auth-screen/AuthScreen';
 import AnalyticsScreen from './containers/analytics-screen/analytics-screen';
+import CountryAnalysis from './containers/analytics-screen/country-analysis';
+import MonthlyAnalysis from './containers/analytics-screen/monthly-analysis';
+import QuaterlyAnalysis from './containers/analytics-screen/quaterly-analysis';
 
 const isNULL = (obj) => {
     if (obj) {
@@ -14,25 +19,36 @@ const isNULL = (obj) => {
 }
 
 function App(props) {
-    const getGoogleLoginUserDetails = localStorage.getItem("googleLoginUserDetails");
-    const authValue = isNULL(getGoogleLoginUserDetails) ? false : true;
+    const routerLocation = useLocation().pathname;
+    console.log(routerLocation);
 
-    const [googleLoginUserDetails, setGoogleLoginUserDetails] = useState(getGoogleLoginUserDetails);
+    const getLoginUserDetails = localStorage.getItem("loginUserDetails");
+    const authValue = isNULL(getLoginUserDetails) ? false : true;
+
+    const [loginUserDetails, setLoginUserDetails] = useState(getLoginUserDetails);
     const [isAuth, SetIsAuth] = useState(authValue);
 
     const routes = [
-        { path: PATHS.LOGIN, component: () => <AuthScreen props={props} isAuth={isAuth} setGoogleLoginUserDetails={setGoogleLoginUserDetails} /> },
-        { path: PATHS.ANALYTICS, component: () => <AnalyticsScreen props={props} SetIsAuth={SetIsAuth} setGoogleLoginUserDetails={setGoogleLoginUserDetails} /> },
-        { path: '/', component: () => <AuthScreen props={props} isAuth={isAuth} setGoogleLoginUserDetails={setGoogleLoginUserDetails} /> },
+        { path: PATHS.LOGIN, component: () => <AuthScreen props={props} isAuth={isAuth} setLoginUserDetails={setLoginUserDetails} /> },
+        { path: PATHS.ANALYTICS_COUNTRY, component: () => <CountryAnalysis /> },
+        { path: PATHS.ANALYTICS_MONTHLY, component: () => <MonthlyAnalysis /> },
+        { path: PATHS.ANALYTICS_QUATERLY, component: () => <QuaterlyAnalysis /> },
+        { path: PATHS.ANALYTICS, component: () => <AnalyticsScreen props={props} SetIsAuth={SetIsAuth} setLoginUserDetails={setLoginUserDetails} /> },
+        { path: '/', component: () => <AuthScreen props={props} isAuth={isAuth} setLoginUserDetails={setLoginUserDetails} /> },
     ]
 
     useEffect(() => {
-        isNULL(googleLoginUserDetails) ? localStorage.removeItem("googleLoginUserDetails") : localStorage.setItem("googleLoginUserDetails", googleLoginUserDetails);
-        isNULL(googleLoginUserDetails) ? localStorage.setItem("isAuth", false) : localStorage.setItem("isAuth", true);
-        isNULL(googleLoginUserDetails) ? props.history.push(PATHS.LOGIN) : props.history.push(PATHS.ANALYTICS);
-        isNULL(googleLoginUserDetails) ? SetIsAuth(false) : SetIsAuth(true);
+        let nextRoute = PATHS.ANALYTICS;
+        if (routerLocation.includes(PATHS.ANALYTICS)) {
+            nextRoute = routerLocation;
+        }
 
-    }, [googleLoginUserDetails, isAuth, props.history]);
+        isNULL(loginUserDetails) ? localStorage.removeItem("loginUserDetails") : localStorage.setItem("loginUserDetails", loginUserDetails);
+        isNULL(loginUserDetails) ? localStorage.setItem("isAuth", false) : localStorage.setItem("isAuth", true);
+        isNULL(loginUserDetails) ? props.history.push(PATHS.LOGIN) : props.history.push(nextRoute);
+        isNULL(loginUserDetails) ? SetIsAuth(false) : SetIsAuth(true);
+
+    }, [loginUserDetails, isAuth, props.history]);
 
     // console.log("check getIsAuth ", isAuth);
     // console.log("check googleLoginUserDetails ", googleLoginUserDetails);
