@@ -3,7 +3,7 @@ import FacebookIcon from '@material-ui/icons/Facebook';
 import Button from '@material-ui/core/Button';
 import { withRouter } from 'react-router';
 
-import { signInWithGoogle, signinWithSocial } from "../../firebase";
+import { signinWithSocial } from "../../firebase";
 
 import '../../style.css';
 

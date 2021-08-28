@@ -1,6 +1,7 @@
 import React from 'react';
 
-function MonthlyAnalysis(props) {
+function MonthlyAnalysis({ props, data }) {
+    console.log("data ", data);
     return (
         <div>
             Monthly Analysis

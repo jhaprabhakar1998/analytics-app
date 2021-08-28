@@ -2,34 +2,15 @@
 import React, { useState } from 'react';
 import { withRouter } from 'react-router';
 
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
-import AccountCircle from '@material-ui/icons/AccountCircle';
-
-import MenuItem from '@material-ui/core/MenuItem';
-import Menu from '@material-ui/core/Menu';
-
-import PATHS from '../../paths';
 import { AreaChart, XAxis, YAxis, CartesianGrid, Tooltip, Area, ResponsiveContainer } from 'recharts';
 
 import { realtimedb } from '../../firebase';
 import '../../style.css';
-import CountryAnalysis from './country-analysis';
 
-function AnalyticsScreen({ props, SetIsAuth, setLoginUserDetails }) {
-    const countryAnalysispath = PATHS.ANALYTICS_COUNTRY.replace(':name', 'india');
-    console.log("countryANalysis path ", countryAnalysispath);
-    const quaterlyAnalysispath = PATHS.ANALYTICS_QUATERLY.replace(':id', '1');
-    const monthlyAnalysispath = PATHS.ANALYTICS_MONTHLY.replace(':id', '1');
-
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const open = Boolean(anchorEl);
+function AnalyticsScreen({ props, data }) {
     let [allRevenueData, setAllRevenueData] = useState([]);
 
-    const areaChartData = allRevenueData.map((dataPoint) => {
+    const areaChartData = data.map((dataPoint) => {
         return {
             "name": dataPoint.Company,
             "January": dataPoint.January,
@@ -46,21 +27,6 @@ function AnalyticsScreen({ props, SetIsAuth, setLoginUserDetails }) {
             "December": dataPoint.December
         }
     })
-
-    const handleMenu = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
-
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
-
-    const handleLogOut = (SetIsAuth, setLoginUserDetails) => {
-        localStorage.clear();
-        setLoginUserDetails(null);
-        SetIsAuth(false);
-        props.history.push('/');
-    };
 
     if (allRevenueData.length === 0) {
         realtimedb.ref().on("value", snapshot => {
@@ -87,53 +53,6 @@ function AnalyticsScreen({ props, SetIsAuth, setLoginUserDetails }) {
 
     return (
         <div>
-            <div>
-                <AppBar position="static">
-                    <Toolbar>
-                        <Typography variant="h6" className={"nav-item"} onClick={() => props.history.push(countryAnalysispath)}>
-                            Country Analysis
-                        </Typography>
-                        <Typography variant="h6" className={"nav-item"} onClick={() => props.history.push(monthlyAnalysispath)}>
-                            Monthly Analysis
-                        </Typography>
-                        <Typography variant="h6" className={"nav-item"} onClick={() => props.history.push(quaterlyAnalysispath)}>
-                            Quarterly Analysis
-                        </Typography>
-                        {(
-                            <div>
-                                <IconButton
-                                    aria-label="account of current user"
-                                    aria-controls="menu-appbar"
-                                    aria-haspopup="true"
-                                    onClick={handleMenu}
-                                    color="inherit"
-                                >
-                                    <AccountCircle />
-                                </IconButton>
-                                <Menu
-                                    id="menu-appbar"
-                                    anchorEl={anchorEl}
-                                    anchorOrigin={{
-                                        vertical: 'top',
-                                        horizontal: 'right',
-                                    }}
-                                    keepMounted
-                                    transformOrigin={{
-                                        vertical: 'top',
-                                        horizontal: 'right',
-                                    }}
-                                    open={open}
-                                    onClose={handleClose}
-                                >
-                                    <MenuItem onClick={() => handleClose}>Profile</MenuItem>
-                                    <MenuItem onClick={() => handleLogOut(SetIsAuth, setLoginUserDetails)}>Log Out</MenuItem>
-                                </Menu>
-                            </div>
-                        )}
-                    </Toolbar>
-                </AppBar>
-            </div>
-
             <h1 style={{ textAlign: 'center' }}>Welcome to Analytics Dashboard</h1>
 
             {
