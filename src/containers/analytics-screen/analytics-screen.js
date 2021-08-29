@@ -54,6 +54,7 @@ function AnalyticsScreen({ props, data }) {
     return (
         <div>
             <h1 style={{ textAlign: 'center' }}>Welcome to Analytics Dashboard</h1>
+            <h4 style={{ textAlign: 'center' }}>You can see the raw figure for each company during each month.</h4>
 
             {
                 allRevenueData.length !== 0 ?
@@ -95,7 +96,7 @@ function AnalyticsScreen({ props, data }) {
             {
                 allRevenueData.length !== 0 ?
                     <div>
-                        <h3 style={{ textAlign: 'center' }}>April - May Analysis</h3>
+                        <h3 style={{ textAlign: 'center' }}>April - June Analysis</h3>
                         <div style={{ height: '100%' }}>
                             <ResponsiveContainer width={'99%'} height={300}>
                                 <AreaChart height={250} data={areaChartData}

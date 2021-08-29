@@ -7,6 +7,8 @@ import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
+import PATHS from '../../paths';
+
 import {
     AreaChart, XAxis, YAxis, CartesianGrid, Tooltip, Area, ResponsiveContainer, PieChart, Pie, Cell, BarChart,
     Bar,
@@ -70,9 +72,9 @@ function CountryAnalysis({ props, data }) {
     const countryWiseRevenueData = new Array()
 
     const country = useParams().name;
-    const countriesDataAvailable = data.map((dataPoint) => {
+    const countriesDataAvailable = [... new Set(data.map((dataPoint) => {
         return (dataPoint.Country).toLowerCase();
-    })
+    }))]
 
     const companiesAnnualFinancialData = data.map((dataPoint) => {
         let annualRevenue = 0;
@@ -117,6 +119,18 @@ function CountryAnalysis({ props, data }) {
     console.log("country Revenue data annual ", countryRevenueDataMap);
     return (
         <div>
+            <div className="country-list" style={{ marginBottom: 20, paddingTop: 20, width: '100%', display: 'flex', justifyContent: 'space-around' }}>
+                {
+                    countriesDataAvailable.map((country) => {
+                        const countryAnalysispath = PATHS.ANALYTICS_COUNTRY.replace(':name', country.toLowerCase());
+                        return (
+                            <Button variant="contained" color="primary" onClick={() => props.history.push(countryAnalysispath)}>
+                                {country.toUpperCase()}
+                            </Button>
+                        )
+                    })
+                }
+            </div>
             {
                 isCountryDataAvailable ?
                     (
@@ -209,7 +223,7 @@ function CountryAnalysis({ props, data }) {
                     )
                     :
                     (
-                        <h1>Sorry the analytical data for this country is not available.</h1>
+                        <h1 style={{ textAlign: 'center', color: 'red' }}>Sorry the analytical data for this country is not available.</h1>
                     )
             }
         </div >
