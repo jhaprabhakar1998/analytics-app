@@ -4,14 +4,13 @@ import { useParams } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 
 import {
-    AreaChart, XAxis, YAxis, CartesianGrid, Tooltip, Area, ResponsiveContainer, PieChart, Pie, Cell, BarChart,
+    XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart,
     Bar,
     Legend,
     LabelList
 } from 'recharts';
 
 import PATHS from '../../paths';
-import { KeyboardReturnSharp } from '@material-ui/icons';
 
 const renderCustomizedLabelBarChart = (props: any) => {
     const { x, y, width, value } = props;
@@ -49,12 +48,11 @@ function MonthlyAnalysis({ props, data }) {
     })
 
     const countriesMonthlyFinancialDataMap = new Map();
-    const countriesMonthlyFinancialBarChartData = new Array();
+    const countriesMonthlyFinancialBarChartData = [];
 
     companiesMonthlyFinancialData.map((dataPoint) => {
         countriesMonthlyFinancialDataMap[dataPoint.Country] = countriesMonthlyFinancialDataMap[dataPoint.Country] ? countriesMonthlyFinancialDataMap[dataPoint.Country] + dataPoint.Revenue : dataPoint.Revenue;
     })
-
 
     for (let k in countriesMonthlyFinancialDataMap) {
         countriesMonthlyFinancialBarChartData.push({ name: k, value: countriesMonthlyFinancialDataMap[k] });
@@ -67,15 +65,12 @@ function MonthlyAnalysis({ props, data }) {
         }
     })
 
-    console.log("companies ", companiesMonthlyFinancialData);
-
     return (
         <div>
             <div className="country-list" style={{ marginBottom: 20, paddingTop: 20, width: '100%', display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap' }}>
                 {
                     monthName.map((month, index) => {
                         const monthlyAnalysispath = PATHS.ANALYTICS_MONTHLY.replace(':id', index + 1);
-                        console.log("Index Month ", index, " ", month);
                         return (
                             <Button variant="contained" color="primary" onClick={() => props.history.push(monthlyAnalysispath)} style={{ marginBottom: 10 }}>
                                 {month}
@@ -88,7 +83,7 @@ function MonthlyAnalysis({ props, data }) {
                 <div>
                     <h1 style={{ textAlign: 'center' }}>{currentMonth}'s Analysis</h1>
                     <div className="charts" style={{ justifyContent: 'space-between' }}>
-                        <div className="chart-item">
+                        <div className="chart-item" key={1}>
                             <ResponsiveContainer width={400} height={400}>
                                 <BarChart
                                     width={300}
@@ -109,12 +104,11 @@ function MonthlyAnalysis({ props, data }) {
                                     <Bar dataKey="value" fill="#8884d8" minPointSize={5}>
                                         <LabelList dataKey="name" content={renderCustomizedLabelBarChart} />
                                     </Bar>
-                                    {/* <Bar dataKey="uv" fill="#82ca9d" minPointSize={10} /> */}
                                 </BarChart>
                             </ResponsiveContainer>
                             <h3 style={{ textAlign: 'center' }}>Company's Share in month of {currentMonth}</h3>
                         </div>
-                        <div className="chart-item">
+                        <div className="chart-item" key={2}>
                             <ResponsiveContainer width={400} height={400}>
                                 <BarChart
                                     width={300}
@@ -135,7 +129,6 @@ function MonthlyAnalysis({ props, data }) {
                                     <Bar dataKey="value" fill="#8884d8" minPointSize={5}>
                                         <LabelList dataKey="name" content={renderCustomizedLabelBarChart} />
                                     </Bar>
-                                    {/* <Bar dataKey="uv" fill="#82ca9d" minPointSize={10} /> */}
                                 </BarChart>
                             </ResponsiveContainer>
                             <h3 style={{ textAlign: 'center' }}>Country's Share in month of {currentMonth}</h3>

@@ -12,11 +12,11 @@ function AuthScreen({ props, setLoginUserDetails, isAuth }) {
     return (
         <div className={"login-screen"}>
             <div className={"login-screen-heading"}>
-                Welcome To My App
+                Welcome To Demo Analytics App
             </div>
             <div className={"login-screen-buttons"}>
                 <div className={"login-facebook"}>
-                    <Button variant="contained" color="primary">
+                    <Button variant="contained" color="primary" onClick={() => signinWithSocial("facebook", true, setLoginUserDetails)}>
                         <FacebookIcon style={{ fontSize: 40 }} />
                         Login With Facebook
                     </Button>

@@ -30,7 +30,6 @@ const isNULL = (obj) => {
 function App(props) {
     /* Maintain the authentication as well as persist state. */
     const routerLocation = useLocation().pathname;
-    console.log(routerLocation);
 
     const getLoginUserDetails = localStorage.getItem("loginUserDetails");
     const authValue = isNULL(getLoginUserDetails) ? false : true;

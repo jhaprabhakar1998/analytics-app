@@ -1,6 +1,7 @@
 import firebase from "firebase/app";
 import 'firebase/firestore';
 import 'firebase/database';
+import 'firebase/analytics'
 import "firebase/auth";
 
 const firebaseConfig = firebase.initializeApp({
@@ -23,13 +24,12 @@ const googleProvider = new firebase.auth.GoogleAuthProvider();
 
 const signinWithSocial = async (provider, rememberMe = false, setLoginUserDetails) => {
     try {
-        console.log("Here I am inside signinWithSocial beginning");
+
         const persistence = rememberMe
             ? firebase.auth.Auth.Persistence.LOCAL
             : firebase.auth.Auth.Persistence.SESSION;
 
-        await firebase.auth().setPersistence(persistence).then((res) => { console.log("response ", res) });
-        console.log("Here I am inside signinWithSocial");
+        await firebase.auth().setPersistence(persistence).then((res) => { });
 
         const providers = {
             google: firebase.auth.GoogleAuthProvider,
@@ -40,9 +40,7 @@ const signinWithSocial = async (provider, rememberMe = false, setLoginUserDetail
         const res = await firebase
             .auth()
             .signInWithPopup(new providers[provider]());
-
-        console.log("res", res);
-        setLoginUserDetails("hello");
+        setLoginUserDetails(res.user);
     }
     catch (err) {
         console.log("error ", err);
@@ -51,7 +49,6 @@ const signinWithSocial = async (provider, rememberMe = false, setLoginUserDetail
 
 const signInWithGoogle = async (setGoogleLoginUserDetails) => {
     try {
-        console.log("inside signInwithGoogle beginning");
         const res = await auth.signInWithPopup(googleProvider);
         const user = res.user;
         const query = await db
@@ -66,7 +63,6 @@ const signInWithGoogle = async (setGoogleLoginUserDetails) => {
                 email: user.email,
             });
         }
-        console.log("inside signInwithGoogle");
         setGoogleLoginUserDetails(user.email);
 
     } catch (err) {
@@ -85,5 +81,5 @@ export {
     realtimedb,
     signInWithGoogle,
     logout,
-    signinWithSocial
+    signinWithSocial,
 };

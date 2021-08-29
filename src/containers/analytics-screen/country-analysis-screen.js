@@ -2,7 +2,6 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 
 import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
@@ -10,7 +9,7 @@ import Typography from '@material-ui/core/Typography';
 import PATHS from '../../paths';
 
 import {
-    AreaChart, XAxis, YAxis, CartesianGrid, Tooltip, Area, ResponsiveContainer, PieChart, Pie, Cell, BarChart,
+    XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, BarChart,
     Bar,
     Legend,
     LabelList
@@ -69,10 +68,12 @@ const renderCustomizedLabel = ({
 function CountryAnalysis({ props, data }) {
 
     const countryRevenueDataMap = new Map()
-    const countryWiseRevenueData = new Array()
+    const countryWiseRevenueData = []
+
+    const monthName = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
     const country = useParams().name;
-    const countriesDataAvailable = [... new Set(data.map((dataPoint) => {
+    const countriesDataAvailable = [...new Set(data.map((dataPoint) => {
         return (dataPoint.Country).toLowerCase();
     }))]
 
@@ -92,31 +93,38 @@ function CountryAnalysis({ props, data }) {
         }
     })
 
+    const countriesFinancialData = data.filter((dataPoint) => dataPoint.Country.toLowerCase() === country.toLowerCase());
+    const countriesFinancialDataMonthly = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    countriesFinancialData.map((dataPoint) => {
+        for (let i = 0; i < 12; i++) {
+            countriesFinancialDataMonthly[i] = countriesFinancialDataMonthly[i] + dataPoint[monthName[i]];
+        }
+    })
+    const countriesFinancialMonthlyBarChartData = countriesFinancialDataMonthly.map((dataPoint, index) => { return { name: monthName[index], value: dataPoint } });
+
     const countryCompaniesAnnualFinancialData = companiesAnnualFinancialData.filter((dataPoint) => (dataPoint.Country.toLowerCase() === country.toLowerCase()));
-    console.log("current country Companies Annual finanaical data  -----", countryCompaniesAnnualFinancialData);
     companiesAnnualFinancialData.map((dataPoint) => {
         countryRevenueDataMap[dataPoint.Country.toLowerCase()] = countryRevenueDataMap[dataPoint.Country] ? countryRevenueDataMap[dataPoint.Country] + dataPoint.Revenue : dataPoint.Revenue;
+    })
+
+    const countryCompaniesAnnualFinancialBarChartData = countryCompaniesAnnualFinancialData.map((dataPoint) => {
+        return {
+            name: dataPoint.Company,
+            value: dataPoint.Revenue
+        }
     })
 
     let allCountriesRevenue = 0
 
     for (let k in countryRevenueDataMap) {
         allCountriesRevenue = allCountriesRevenue + countryRevenueDataMap[k];
-        console.log("all countries revenue ", allCountriesRevenue);
         const countryName = k.toLowerCase();
         const countryNameTitleCase = countryName.charAt(0).toUpperCase() + countryName.substr(1);
         countryWiseRevenueData.push({ name: countryNameTitleCase, value: countryRevenueDataMap[k] });
     }
 
-    // const totalCountriesRevenue = countryWiseRevenueData.reduce(function (accumulator, currentCountryRevenueData) {
-    //     return accumulator + currentCountryRevenueData;
-    // });
-
     const isCountryDataAvailable = countriesDataAvailable.includes(country);
 
-    console.log("data ", data, "countries ", countriesDataAvailable, "country ", country, " iscountry ", isCountryDataAvailable);
-    console.log("companie annual revenue data ", companiesAnnualFinancialData);
-    console.log("country Revenue data annual ", countryRevenueDataMap);
     return (
         <div>
             <div className="country-list" style={{ marginBottom: 20, paddingTop: 20, width: '100%', display: 'flex', justifyContent: 'space-around' }}>
@@ -157,9 +165,9 @@ function CountryAnalysis({ props, data }) {
                                             <Bar dataKey="value" fill="#8884d8" minPointSize={5}>
                                                 <LabelList dataKey="name" content={renderCustomizedLabelBarChart} />
                                             </Bar>
-                                            {/* <Bar dataKey="uv" fill="#82ca9d" minPointSize={10} /> */}
                                         </BarChart>
                                     </ResponsiveContainer>
+                                    <h3 style={{ textAlign: 'center' }}>Coutry wise Annual Revenue Data</h3>
                                 </div>
                                 <div className="chart-item">
                                     <ResponsiveContainer width={350} height={400}>
@@ -181,6 +189,57 @@ function CountryAnalysis({ props, data }) {
                                             <Tooltip />
                                         </PieChart>
                                     </ResponsiveContainer>
+                                    <h3 style={{ textAlign: 'center' }}>Coutry wise Annual Revenue Share</h3>
+                                </div>
+                                <div className="chart-item">
+                                    <ResponsiveContainer width={350} height={400}>
+                                        <BarChart
+                                            width={300}
+                                            height={300}
+                                            data={countryCompaniesAnnualFinancialBarChartData}
+                                            margin={{
+                                                top: 50,
+                                                right: 10,
+                                                left: 20,
+                                                bottom: 5
+                                            }}
+                                        >
+                                            <CartesianGrid strokeDasharray="3 3" />
+                                            <XAxis dataKey="name" />
+                                            <YAxis />
+                                            <Tooltip />
+                                            <Legend />
+                                            <Bar dataKey="value" fill="#8884d8" minPointSize={5}>
+                                                <LabelList dataKey="name" content={renderCustomizedLabelBarChart} />
+                                            </Bar>
+                                        </BarChart>
+                                    </ResponsiveContainer>
+                                    <h3 style={{ textAlign: 'center' }}>{country.toUpperCase()}'s Company Share Bar Chart</h3>
+                                </div>
+                                <div className="chart-item">
+                                    <ResponsiveContainer width={350} height={400}>
+                                        <BarChart
+                                            width={300}
+                                            height={300}
+                                            data={countriesFinancialMonthlyBarChartData}
+                                            margin={{
+                                                top: 50,
+                                                right: 10,
+                                                left: 20,
+                                                bottom: 5
+                                            }}
+                                        >
+                                            <CartesianGrid strokeDasharray="3 3" />
+                                            <XAxis dataKey="name" />
+                                            <YAxis />
+                                            <Tooltip />
+                                            <Legend />
+                                            <Bar dataKey="value" fill="#8884d8" minPointSize={5}>
+                                                <LabelList dataKey="name" content={renderCustomizedLabelBarChart} />
+                                            </Bar>
+                                        </BarChart>
+                                    </ResponsiveContainer>
+                                    <h3 style={{ textAlign: 'center' }}>{country.toUpperCase()}'s Monthly Revenue Share</h3>
                                 </div>
                                 <div className="chart-item">
 
@@ -198,10 +257,10 @@ function CountryAnalysis({ props, data }) {
                                             <Typography variant="body2" component="p" style={{ fontSize: 20, textAlign: 'center', fontWeight: 700, marginTop: 30, marginBottom: 10 }}>
                                                 Companies
                                             </Typography>
-                                            {countryCompaniesAnnualFinancialData.map((dataPoint) => {
+                                            {countryCompaniesAnnualFinancialData.map((dataPoint, index) => {
 
                                                 return (
-                                                    <Typography variant="body2" component="p" style={{ fontSize: 18, textAlign: 'center', fontWeight: 500, marginBottom: 10 }}>
+                                                    <Typography key={index} variant="body2" component="p" style={{ fontSize: 18, textAlign: 'center', fontWeight: 500, marginBottom: 10 }}>
                                                         {dataPoint.Company} - {dataPoint.Revenue}
                                                     </Typography>
                                                 )
@@ -211,12 +270,6 @@ function CountryAnalysis({ props, data }) {
                                             </Typography>
                                         </CardContent>
                                     </Card>
-                                    {/* <div style={{ textAlign: 'center' }}>
-                                        <h1> Country - {country.toUpperCase()}</h1>
-                                        <h2>Total Annual Revenue - {countryRevenueDataMap[country.toLowerCase()]}</h2>
-                                        <h3>Total Annual Revenue (All countries) - {allCountriesRevenue}</h3>
-                                        <h3>Countries Share - {Math.round((countryRevenueDataMap[country.toLowerCase()]) / (allCountriesRevenue) * 100) + "%"}</h3>
-                                    </div> */}
                                 </div>
                             </div>
                         </div>

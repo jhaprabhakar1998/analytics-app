@@ -87,6 +87,7 @@ function AnalyticsScreen({ props, data }) {
                                     <Area type="monotone" dataKey="March" stroke="#ffca9d" fillOpacity={1} fill="url(#color3)" />
                                 </AreaChart>
                             </ResponsiveContainer>
+                            <h3>World Countries Annual Share</h3>
                         </div>
                     </div>
                     :
