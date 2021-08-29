@@ -67,6 +67,21 @@ html {
   flex: 1;
 }
 
+.container{
+    width: 100%;
+}
+
+ .charts{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    /* flex-direction: row; */
+}
+
+.chart-item{
+    margin: 10px;
+} 
+
 @media screen and (max-width: 720px) {
   #menu-icon {
     display: flex;

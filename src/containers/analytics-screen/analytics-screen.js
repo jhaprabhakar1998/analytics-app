@@ -2,28 +2,15 @@
 import React, { useState } from 'react';
 import { withRouter } from 'react-router';
 
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
-import AccountCircle from '@material-ui/icons/AccountCircle';
-
-import MenuItem from '@material-ui/core/MenuItem';
-import Menu from '@material-ui/core/Menu';
-
 import { AreaChart, XAxis, YAxis, CartesianGrid, Tooltip, Area, ResponsiveContainer } from 'recharts';
 
 import { realtimedb } from '../../firebase';
 import '../../style.css';
 
-function AnalyticsScreen({ props, SetIsAuth, setGoogleLoginUserDetails }) {
-
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const open = Boolean(anchorEl);
+function AnalyticsScreen({ props, data }) {
     let [allRevenueData, setAllRevenueData] = useState([]);
 
-    const areaChartData = allRevenueData.map((dataPoint) => {
+    const areaChartData = data.map((dataPoint) => {
         return {
             "name": dataPoint.Company,
             "January": dataPoint.January,
@@ -40,26 +27,6 @@ function AnalyticsScreen({ props, SetIsAuth, setGoogleLoginUserDetails }) {
             "December": dataPoint.December
         }
     })
-
-    const handleMenu = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
-
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
-
-    const handleLogOut = (SetIsAuth, setGoogleLoginUserDetails) => {
-        // localStorage.setItem("isAuth", false);
-        // localStorage.setItem("googleLoginUserDetails", '#');
-
-        // localStorage.removeItem("googleLoginUserDetails");
-        // localStorage.removeItem("isAuth");
-        localStorage.clear();
-        setGoogleLoginUserDetails(null);
-        SetIsAuth(false);
-        props.history.push('/');
-    };
 
     if (allRevenueData.length === 0) {
         realtimedb.ref().on("value", snapshot => {
@@ -86,51 +53,8 @@ function AnalyticsScreen({ props, SetIsAuth, setGoogleLoginUserDetails }) {
 
     return (
         <div>
-            <div>
-                <AppBar position="static">
-                    <Toolbar>
-                        <IconButton edge="start" id={"menu-icon"} color="inherit" aria-label="menu">
-                            <MenuIcon />
-                        </IconButton>
-                        <Typography variant="h6" className={"nav-item"} >
-                            Photos
-                        </Typography>
-                        {(
-                            <div>
-                                <IconButton
-                                    aria-label="account of current user"
-                                    aria-controls="menu-appbar"
-                                    aria-haspopup="true"
-                                    onClick={handleMenu}
-                                    color="inherit"
-                                >
-                                    <AccountCircle />
-                                </IconButton>
-                                <Menu
-                                    id="menu-appbar"
-                                    anchorEl={anchorEl}
-                                    anchorOrigin={{
-                                        vertical: 'top',
-                                        horizontal: 'right',
-                                    }}
-                                    keepMounted
-                                    transformOrigin={{
-                                        vertical: 'top',
-                                        horizontal: 'right',
-                                    }}
-                                    open={open}
-                                    onClose={handleClose}
-                                >
-                                    <MenuItem onClick={() => handleClose}>Profile</MenuItem>
-                                    <MenuItem onClick={() => handleLogOut(SetIsAuth, setGoogleLoginUserDetails)}>Log Out</MenuItem>
-                                </Menu>
-                            </div>
-                        )}
-                    </Toolbar>
-                </AppBar>
-            </div>
-
-            <h1 style={{ textAlign: 'center' }}>Welcome to AnalyticsScreen</h1>
+            <h1 style={{ textAlign: 'center' }}>Welcome to Analytics Dashboard</h1>
+            <h4 style={{ textAlign: 'center' }}>You can see the raw figure for each company during each month.</h4>
 
             {
                 allRevenueData.length !== 0 ?
@@ -163,6 +87,7 @@ function AnalyticsScreen({ props, SetIsAuth, setGoogleLoginUserDetails }) {
                                     <Area type="monotone" dataKey="March" stroke="#ffca9d" fillOpacity={1} fill="url(#color3)" />
                                 </AreaChart>
                             </ResponsiveContainer>
+                            <h3>World Countries Annual Share</h3>
                         </div>
                     </div>
                     :
@@ -172,7 +97,7 @@ function AnalyticsScreen({ props, SetIsAuth, setGoogleLoginUserDetails }) {
             {
                 allRevenueData.length !== 0 ?
                     <div>
-                        <h3 style={{ textAlign: 'center' }}>April - May Analysis</h3>
+                        <h3 style={{ textAlign: 'center' }}>April - June Analysis</h3>
                         <div style={{ height: '100%' }}>
                             <ResponsiveContainer width={'99%'} height={300}>
                                 <AreaChart height={250} data={areaChartData}

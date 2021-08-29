@@ -1,6 +1,7 @@
 import firebase from "firebase/app";
 import 'firebase/firestore';
 import 'firebase/database';
+import 'firebase/analytics'
 import "firebase/auth";
 
 const firebaseConfig = firebase.initializeApp({
@@ -20,6 +21,32 @@ const db = app.firestore();
 const realtimedb = firebase.database();
 
 const googleProvider = new firebase.auth.GoogleAuthProvider();
+
+const signinWithSocial = async (provider, rememberMe = false, setLoginUserDetails) => {
+    try {
+
+        const persistence = rememberMe
+            ? firebase.auth.Auth.Persistence.LOCAL
+            : firebase.auth.Auth.Persistence.SESSION;
+
+        await firebase.auth().setPersistence(persistence).then((res) => { });
+
+        const providers = {
+            google: firebase.auth.GoogleAuthProvider,
+            facebook: firebase.auth.FacebookAuthProvider,
+            twitter: firebase.auth.TwitterAuthProvider,
+        };
+
+        const res = await firebase
+            .auth()
+            .signInWithPopup(new providers[provider]());
+        setLoginUserDetails(res.user);
+    }
+    catch (err) {
+        console.log("error ", err);
+    }
+}
+
 const signInWithGoogle = async (setGoogleLoginUserDetails) => {
     try {
         const res = await auth.signInWithPopup(googleProvider);
@@ -37,6 +64,7 @@ const signInWithGoogle = async (setGoogleLoginUserDetails) => {
             });
         }
         setGoogleLoginUserDetails(user.email);
+
     } catch (err) {
         console.error(err);
         alert(err.message);
@@ -53,4 +81,5 @@ export {
     realtimedb,
     signInWithGoogle,
     logout,
+    signinWithSocial,
 };
