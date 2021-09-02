@@ -1,3 +1,3 @@
-## Get Mega Assessment
+## Demo Analytics App
 
-This is an assessment project.
+A react app to get some useful insights from the data. Data is being fetched from firebase and user has to authenticate before being able to view the analysis.
